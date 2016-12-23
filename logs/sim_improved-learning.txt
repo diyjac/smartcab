@@ -1,0 +1,148 @@
+/-----------------------------------------
+| State-action rewards from Q-Learning
+\-----------------------------------------
+
+right_red_left
+ -- forward : -1041.06
+ -- left : -4023.89
+ -- right : -2055.81
+ -- None : 181.88
+
+forward_red_None
+ -- forward : -1040.46
+ -- left : -3901.17
+ -- right : 38.96
+ -- None : 115.59
+
+left_red_None
+ -- forward : -971.61
+ -- left : -1026.45
+ -- right : 14.04
+ -- None : 184.87
+
+right_green_None
+ -- forward : 0.33
+ -- left : 48.85
+ -- right : 82.88
+ -- None : -580.22
+
+right_red_forward
+ -- forward : -1062.62
+ -- left : -932.93
+ -- right : -1945.70
+ -- None : 110.92
+
+right_green_right
+ -- forward : 88.17
+ -- left : -1901.89
+ -- right : 194.66
+ -- None : -535.40
+
+forward_green_left
+ -- forward : 193.98
+ -- left : 88.60
+ -- right : 12.53
+ -- None : 68.18
+
+forward_red_left
+ -- forward : -942.46
+ -- left : -996.30
+ -- right : 50.32
+ -- None : 126.79
+
+left_red_right
+ -- forward : -3964.87
+ -- left : -4058.94
+ -- right : 24.25
+ -- None : 197.39
+
+forward_green_None
+ -- forward : 185.51
+ -- left : 34.20
+ -- right : 36.83
+ -- None : -477.14
+
+forward_green_forward
+ -- forward : 195.25
+ -- left : -1966.97
+ -- right : 91.27
+ -- None : -413.21
+
+right_red_None
+ -- forward : -1099.01
+ -- left : -1064.62
+ -- right : -2099.64
+ -- None : 196.26
+
+forward_green_right
+ -- forward : 277.05
+ -- left : -1904.50
+ -- right : 99.50
+ -- None : -497.58
+
+left_red_forward
+ -- forward : -3923.64
+ -- left : -1081.74
+ -- right : 78.70
+ -- None : 284.27
+
+left_red_left
+ -- forward : -946.27
+ -- left : -936.09
+ -- right : -2034.05
+ -- None : 134.99
+
+left_green_None
+ -- forward : 95.56
+ -- left : 239.14
+ -- right : 16.26
+ -- None : -569.33
+
+right_red_right
+ -- forward : -919.08
+ -- left : -4071.17
+ -- right : 154.14
+ -- None : 196.54
+
+left_green_forward
+ -- forward : -0.60
+ -- left : -2055.85
+ -- right : 32.04
+ -- None : -541.97
+
+right_green_left
+ -- forward : -37.14
+ -- left : 23.57
+ -- right : 171.50
+ -- None : -29.99
+
+left_green_right
+ -- forward : 5.57
+ -- left : -2048.75
+ -- right : 60.48
+ -- None : -404.81
+
+right_green_forward
+ -- forward : -29.43
+ -- left : -1931.82
+ -- right : 204.84
+ -- None : -404.53
+
+forward_red_forward
+ -- forward : -3930.94
+ -- left : -984.85
+ -- right : -1991.79
+ -- None : 182.59
+
+left_green_left
+ -- forward : 23.51
+ -- left : 210.31
+ -- right : 61.97
+ -- None : 52.75
+
+forward_red_right
+ -- forward : -4004.61
+ -- left : -3929.17
+ -- right : -5.76
+ -- None : 226.30
+
