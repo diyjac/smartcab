@@ -44,6 +44,7 @@ class LearningAgent(Agent):
             self.epsilon = 0.0
             self.alpha = 0.0
         else:
+            # self.epsilon = self.epsilon - 0.05
             self.t += 1.0
             # self.epsilon = 1.0/(self.t**2)
             # self.epsilon = 1.0/(self.t**2 + self.alpha*self.t)
@@ -80,10 +81,9 @@ class LearningAgent(Agent):
             else:
                 return str(s)
         
-        state = xstr(waypoint) + "_" + inputs['light'] + "_" + xstr(inputs['oncoming'])
+        state = xstr(waypoint) + "_" + inputs['light'] + "_" + xstr(inputs['left']) + "_" +  xstr(inputs['oncoming'])
         if self.learning:
-            self.Q[state] = self.Q.get(state, {None:-1000.0, 'forward':-1000.0, 'left':-1000.0, 'right':-1000.0})
-
+            self.Q[state] = self.Q.get(state, {None:0.0, 'forward':0.0, 'left':0.0, 'right':0.0})
         return state
 
 
@@ -95,11 +95,12 @@ class LearningAgent(Agent):
         ## TO DO ##
         ###########
         # Calculate the maximum Q-value of all actions for a given state
+        # preset an initialization value that should be replaced by a more valid Q value in the loop.
         maxQ = -1000.0
         for action in self.Q[state]:
             if maxQ < self.Q[state][action]:
                 maxQ = self.Q[state][action]
-        return maxQ 
+        return maxQ
 
 
     def createQ(self, state):
@@ -111,37 +112,11 @@ class LearningAgent(Agent):
         # When learning, check if the 'state' is not in the Q-table
         # If it is not, create a new dictionary for that state
         #   Then, for each action available, set the initial Q-value to 0.0
-        # - NOTE: using -1000 instead so we can detect initial values as supposed to real weighted rewards.
         if self.learning:
-            self.Q[state] = self.Q.get(state, {None:-1000.0, 'forward':-1000.0, 'left':-1000.0, 'right':-1000.0})
+            self.Q[state] = self.Q.get(state, {None:0.0, 'forward':0.0, 'left':0.0, 'right':0.0})
 
         return
 
-    #
-    # NOTE: This is a new function to track what we have not explored yet.
-    #       This is a concept known as 'deliberate practice'
-    #          http://expertenough.com/1423/deliberate-practice
-    #       The idea is that you don't want to repeat/pratice what you already know.
-    #       You only pratice what you don't know that is just within reach of your knowledge.
-    #       This is what this function does, it isolates what is not yet known and directs
-    #       the agent to learn it out of the possible actions available for the policy.
-    #       This is where the -1000.0 comes to play, since it is the initialization value, we
-    #       can use it to detect if an action is currently not within the agent's domain.
-    #       If all actions are initialized with weighted rewards already, then we use the state
-    #       and direct the agent to take the appropriate action in learning mode.
-    def unexplored_actions(self, state, valid_actions):
-        unexplored_actions = []
-        for act in self.Q[state]:
-            if self.Q[state][act] == -1000.0:
-                unexplored_actions.append(act)
-        if len(unexplored_actions) == 0:
-            states = state.split('_')
-            if states[1] == 'red':
-                act = None
-            else:
-                act = states[0]
-            unexplored_actions.append(act)
-        return unexplored_actions
 
     def choose_action(self, state):
         """ The choose_action function is called when the agent is asked to choose
@@ -150,6 +125,7 @@ class LearningAgent(Agent):
         # Set the agent state and default action
         self.state = state
         self.next_waypoint = self.planner.next_waypoint()
+        action = None
 
         ########### 
         ## TO DO ##
@@ -157,21 +133,19 @@ class LearningAgent(Agent):
         # When not learning, choose a random action
         # When learning, choose a random action with 'epsilon' probability
         #   Otherwise, choose an action with the highest Q-value for the current state
-        # Again - we will be using 'deliberate practice' methologies here to speed learning.
-        # http://expertenough.com/1423/deliberate-practice
 
-        action = None
         if not self.learning:
             action = random.choice(self.valid_actions)
         else:
             if self.epsilon > 0.01 and self.epsilon > random.random():
-                action = random.choice(self.unexplored_actions(state, self.valid_actions))
+                action = random.choice(self.valid_actions)
             else:
+                valid_actions = []
                 maxQ = self.get_maxQ(state)
                 for act in self.Q[state]:
                     if maxQ == self.Q[state][act]:
-                        action = act
-                        break
+                        valid_actions.append(act)
+                action = random.choice(valid_actions)
         return action
 
 
@@ -185,8 +159,8 @@ class LearningAgent(Agent):
         ###########
         # When learning, implement the value iteration update rule
         #   Use only the learning rate 'alpha' (do not use the discount factor 'gamma')
-        if self.learning and self.alpha > 0.0:
-            self.Q[state][action] = reward/self.alpha
+        if self.learning:
+            self.Q[state][action] = self.Q[state][action] + self.alpha*(reward-self.Q[state][action])
 
         return
 
@@ -215,7 +189,7 @@ def run():
     #   verbose     - set to True to display additional output from the simulation
     #   num_dummies - discrete number of dummy agents in the environment, default is 100
     #   grid_size   - discrete number of intersections (columns, rows), default is (8, 6)
-    env = Environment(verbose=True)
+    env = Environment()
     
     ##############
     # Create the driving agent
@@ -238,14 +212,14 @@ def run():
     #   display      - set to False to disable the GUI if PyGame is enabled
     #   log_metrics  - set to True to log trial and simulation results to /logs
     #   optimized    - set to True to change the default log file name
-    sim = Simulator(env, update_delay=0.01, display=True, log_metrics=True, optimized=True)
+    sim = Simulator(env, update_delay=0.01, log_metrics=True, optimized=True)
     
     ##############
     # Run the simulator
     # Flags:
     #   tolerance  - epsilon tolerance before beginning testing, default is 0.05 
     #   n_test     - discrete number of testing trials to perform, default is 0
-    sim.run(n_test=100, tolerance=0.0008)
+    sim.run(n_test=100, tolerance=0.001)
 
 
 if __name__ == '__main__':
