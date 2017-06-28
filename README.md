@@ -1,6 +1,8 @@
 # Smartcab
 Udacity MLND: Project: Reinforcement Learning - Train a Smartcab to Drive
 
+![Final Q-Learning Results](final-qlearning-results.png)
+
 Smartcab is a *project result submission* for Udacity Smartcab project.  It is a worksheet in **Jupyter Notebook**, in which we will use reinforcement machine learning techniques to construct an optimized Q-Learning driving agent that will navigate a *Smartcab* through its environment towards a goal.
 
 ## Installation
